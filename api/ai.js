@@ -11,7 +11,8 @@ export default async function handler(req, res) {
   content.push({ type: "text", text: typeof input === "string" ? input : JSON.stringify(input) });
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   try {
-    const msg = await client.messages.create({ model: MODELS[tier] || MODELS.default, max_tokens: 6000, system: json ? "Respond with valid JSON only. No prose, no code fences." : undefined, messages: [{ role: "user", content }] });
+    const msg = await client.messages.create({ model: MODELS[tier] || MODELS.default, max_tokens: 16000, system: json ? "Respond with valid JSON only. No prose, no code fences." : undefined, messages: [{ role: "user", content }] });
+    if (json && msg.stop_reason === "max_tokens") return res.status(502).json({ error: "Model response was cut off before the JSON was complete" });
     const text = msg.content.filter((b) => b.type === "text").map((b) => b.text).join("");
     if (!json) return res.json({ text });
     const cleaned = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
