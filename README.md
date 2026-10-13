@@ -11,4 +11,4 @@ cp .env.example .env.local   # ANTHROPIC_API_KEY
 npx vercel dev
 ```
 ## Deploy
-See `.claude/skills/ux-audit/SKILL.md`. Live: _add URL after deploy_
+See `.claude/skills/ux-audit/SKILL.md`. Live: https://ux-audit-liart.vercel.app
